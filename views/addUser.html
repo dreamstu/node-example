@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta charset="UTF-8">
+    <title>新增用户</title>
+    <link media="all" href="../static/css/one.css" rel="stylesheet">
+    <style>
+        .wrapper {
+            width: 990px;
+            margin: 0 auto;
+        }
+        h1 {
+            font-size: 26px;
+        }
+        .ui-grid-row {
+            margin-bottom: 15px;
+        }
+    </style>
+    </head>
+    <body>
+        <div class="wrapper">
+            <div class="ui-grid-row">
+                <div class="ui-grid-25">
+                    <h1>管理用户信息  新增用户</h1>
+                    <form class="ui-form" name="" method="post" action="/user/addUser">
+                    <fieldset>
+                        <legend>新增用户</legend>
+                        <div class="ui-form-item ui-form-item-error">
+                            <label for="" class="ui-label"></label>
+                            <p class="ui-form-text">
+                        </div>
+                        <div class="ui-form-item">
+                            <label for="" class="ui-label">
+                                <span class="ui-form-required">*</span>用户名
+                            </label>
+                            <input class="ui-input" type="text" name="username"> <span class="ui-form-other"></span>
+                            <p class="ui-form-explain">用户名为2-20个字符。</p>
+                        </div>
+
+                        <div class="ui-form-item">
+                            <label for="" class="ui-label">
+                                <span class="ui-form-required">*</span>登录名
+                            </label>
+                            <input class="ui-input ui-input-large" type="text" name="loginname"> <span class="ui-form-other"></span>
+                            <p class="ui-form-explain">
+                                登录名为2-20个字符
+                            </p>
+                        </div>
+
+                        <div class="ui-form-item">
+                            <label for="" class="ui-label">
+                                <span class="ui-form-required">*</span>密码
+                            </label>
+                            <input class="ui-input" type="text" name="password"> <span class="ui-form-other"></span>
+                            <p class="ui-form-explain">
+                                密码为6-20个字符
+                            </p>
+                        </div>
+
+                        <div class="ui-form-item">
+                            <label for="" class="ui-label">
+                                <span class="ui-form-required">*</span>确认密码
+                            </label>
+                            <input class="ui-input" type="text" name="repassword"> <span class="ui-form-other"></span>
+                            <p class="ui-form-explain">
+                                确认密码必须和密码一致
+                            </p>
+                        </div>
+
+                        <div class="ui-form-item">
+                            <label for="" class="ui-label">
+                                <span class="ui-form-required">*</span>状态
+                            </label>
+                            <select id="status" name="status">
+                                <option value="">
+                                请选择
+                                </option>
+                                <option value="0">
+                                正常
+                                </option>
+                                <option value="1">
+                                禁用
+                                </option>
+                            </select>
+                            <p class="ui-form-explain">请选择用户初始状态，将会影响用户登录。</p>
+                        </div>
+
+                        <div class="ui-form-item">
+                            <label for="test">
+                                <input class="ui-checkbox" id="xieyi" name="xieyi" type="checkbox">
+                                我已阅读并接受服务协议
+                            </label>
+                        </div>
+
+                        <div class="ui-form-item">
+                            <input type="submit" class="ui-button ui-button-morange" value="确定">
+                            <input type="button" class="ui-button ui-button-mwhite" value="取消">
+                        </div>
+                    </fieldset>
+                </form>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript" src="https://a.alipayobjects.com/seajs/seajs/2.2.0/sea.js"></script>
+        <script type="text/javascript">
+            seajs.config({
+                base:'https://a.alipayobjects.com/',
+                alias:{
+                    '$':'https://a.alipayobjects.com/jquery/jquery/1.7.2/jquery.js'
+                }
+            });
+
+            seajs.use(['arale/validator/0.9.7/validator', '$'], function(Validator, $) {
+                $(function() {
+                    var t1 = (new Date).getTime();
+
+                    var NewValidator = Validator.extend({
+                        attrs: {
+                            showMessage: function (message, element) {
+                                message = '<i class="ui-tiptext-icon iconfont">&#xF045;</i>\
+                                           <span class="ui-form-explain-text">' + message + '</span>';
+                                this.getExplain(element)
+                                    .addClass('ui-tiptext ui-tiptext-error')
+                                    .html(message);
+                                this.getItem(element).addClass(this.get('itemErrorClass'));
+                            }
+                        }
+                    });
+
+                    var validator = new NewValidator({
+                        element: 'form',
+                        autoSubmit:false,
+                        onFormValidated: function(err, results, form) {
+                            var user = $('form').serialize();
+                            /*var user = {};
+                            $(array).each(function(idx,data){
+                                var name = data.name;
+                                var value = data.value;
+                                user['"'+name+'"'] = value;
+                            });*/
+                            //user = JSON.parse(user);
+                            $.post('addUser',{"user":user},function(rst){
+                                if(rst.state==0){
+                                    alert("注册成功");    
+                                }else{
+                                    alert("注册失败"); 
+                                }
+                            });
+                            console.log(user);
+                            window.console && console.log && console.log(err, results, form);
+                        },
+                        failSilently: true
+                    });
+                    var t2 = (new Date).getTime();
+                    document.title = (t2 - t1);
+
+                    validator.addItem({
+                        element: '[name=username]',
+                        required: true,
+                        rule: 'minlength{"min":2} maxlength{"max":20}',
+                        display:'用户名'
+                    })
+                    .addItem({
+                        element: '[name=loginname]',
+                        required: true,
+                        rule: 'minlength{"min":2} maxlength{"max":20}',
+                        display:'登录名'
+                    })
+                    .addItem({
+                        element: '[name=password]',
+                        required: true,
+                        rule: 'minlength{"min":6} maxlength{"max":20}',
+                        display:'密码'
+                    })
+
+                    .addItem({
+                        element: '[name=repassword]',
+                        required: true,
+                        rule: 'confirmation{target: "[name=password]", name: "第一遍"}',
+                        errormessageRequired: '请再重复输入一遍密码，不能留空。'
+                    })
+                    
+                    .addItem({
+                        element: '[name=status]',
+                        required: true,
+                        errormessageRequired: '请选择用户状态。'
+                    })
+
+                    .addItem({
+                        element: '[name=xieyi]',
+                        required: true,
+                        errormessageRequired: '请阅读并勾选协议。'
+                    });
+                });
+            });
+        </script>
+</body>
+</html>

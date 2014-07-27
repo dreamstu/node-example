@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta charset="UTF-8">
+    <title>用户列表</title>
+    <link media="all" href="../static/css/one.css" rel="stylesheet">
+    <style>
+        .wrapper {
+            width: 990px;
+            margin: 0 auto;
+        }
+        h1 {
+            font-size: 26px;
+        }
+        .ui-grid-row {
+            margin-bottom: 15px;
+        }
+    </style>
+    </head>
+	<body>
+		<div class="wrapper">
+	        <div class="ui-grid-row">
+	            <div class="ui-grid-25">
+	                <h1>所有用户数据</h1>
+	            </div>
+	        </div>
+	        <div class="ui-table-container">
+			    <table class="ui-table ui-table-hover"><!-- 可以在class中加入ui-table-inbox或ui-table-noborder分别适应不同的情况 -->
+			        <thead>
+			            <tr>
+			                <th>用户ID</th>
+							<th>用户名</th>
+							<th>登录名</th>
+							<th>密码</th>
+							<th>状态</th>
+			            </tr>
+			        </thead><!-- 表头可选 -->
+			        <tbody>
+			            <%users.map(user)%>
+			        </tbody>
+			        <tfoot>
+			            <tr>
+			                <td colspan="5">本页显示10条</td>
+			            </tr>
+			        </tfoot><!-- 表尾可选 -->
+			    </table>
+			</div>
+	    </div>
+	</body>
+	<%function user(user){%>
+		<tr>
+			<td><%=user.UserID%></td>
+			<td><%=user.userName%></td>
+			<td><%=user.loginName%></td>
+			<td><%=user.loginPsd%></td>
+			<td><%=(user.status)==0?'可用':'禁用'%></td>
+		</tr>
+	<%}%>
+</html>
+

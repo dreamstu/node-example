@@ -1,0 +1,11 @@
+{
+  "name": "node-web-example",
+  "description": "example for node",
+  "version": "0.1.0",
+  "main": "./index.js",
+  "dependencies": {
+    "ejs": "~0.8.3",
+    "express":"~4.7.1",
+    "mysql":"~2.4.1"
+  }
+}
